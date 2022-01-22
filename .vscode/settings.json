@@ -1,0 +1,7 @@
+{
+    "java.project.sourcePaths": [
+        "assignments-java/.vscode",
+        "assignments-java",
+        "core-java/section4"
+    ]
+}
