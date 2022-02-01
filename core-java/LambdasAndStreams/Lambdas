@@ -1,0 +1,12 @@
+Lambdas :
+Lambdas are compact code blocks that can be passed around just like data values to the other methods.
+
+Lambda Syntax:
+.Input arguments, body and a return
+    (input arguments)->body
+.Left hand side is inputs
+.Right hand side is logic
+.Arrow token is separator
+.Example:
+    1)(Integer i)->i*i;
+    2)(String s1,String s2)->s1+s2 (concatenating two strings)
