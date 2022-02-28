@@ -1,58 +1,66 @@
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Scanner;
 
-public class Assignment4 {
-    public static void main(String []args) throws ParseException {
-        Scanner input = new Scanner(System.in);
+class KYC{
+    private String anniversary;
+    private Date signInDate;
+    private Date todayDate;
+    public void calculateRange(String signIn,String today){
+        SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            signInDate=dateFormat.parse(signIn);
+            todayDate=dateFormat.parse(today);
+            if(signInDate.compareTo(todayDate)>0)
+                System.out.println("no range");
 
-        int testCases = 0;
-        testCases = input.nextInt();
+            else {
+                String newString=signIn.substring(0,6);
 
-        while(testCases > 0){
-            //Declaring Signup and Current date for kyc approval
-            String signupDate = input.next();
-            String currentDate = input.next();
+                anniversary=newString.concat(today.substring(6,10));
 
-            //creating calendar object below
-            Calendar calendar = Calendar.getInstance();
+                //System.out.println(anniversary);
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTime(dateFormat.parse(anniversary));
 
-            //Converting date to string
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                calendar.add(Calendar.DATE,-30);
+                String startRange= dateFormat.format(calendar.getTime());
+                System.out.print(startRange);
 
-            Date signUpDate = simpleDateFormat.parse(signupDate);
-            Date currDate = simpleDateFormat.parse(currentDate);
+                calendar.setTime(dateFormat.parse(anniversary));
+                calendar.add(Calendar.DATE,+30);
+                String endRange="";
+                if(calendar.getTime().compareTo(todayDate)>0)
+                {
+                    endRange= dateFormat.format(todayDate);
+                    System.out.print("\t"+endRange+"\n");
+                }
+                else
+                    System.out.print("\t" + dateFormat.format(calendar.getTime())+"\n");
 
-            if(signUpDate.after(currDate)){
-                System.out.println("No range");
             }
-
-            calendar.setTime(currDate);
-            int currYear = calendar.getWeekYear();
-
-            calendar.setTime(signUpDate);
-            int signUpYear = calendar.getWeekYear();
-
-            calendar.add(Calendar.YEAR,currYear - signUpYear);
-
-            calendar.add(Calendar.DATE,-30);
-            Date startDate = calendar.getTime();
-
-            calendar.add(Calendar.DATE,60);
-            Date endDate = calendar.getTime();
-
-            if(endDate.after(currDate)){
-                endDate = currDate;
-            }
-
-            System.out.println(simpleDateFormat.format(startDate) + "  "
-                    + simpleDateFormat.format(endDate));
-
-            testCases--;
         }
-
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }
+public class Main {
+
+    public static void main(String[] args) {
+        KYC kyc=new KYC();
+        kyc.calculateRange("16-07-1998", "27-06-2017");
+        kyc.calculateRange("04-02-2016", "04-04-2017");
+        kyc.calculateRange("04-05-2017", "04-04-2017");
+        kyc.calculateRange("04-04-2015", "04-04-2016");
+        kyc.calculateRange("04-04-2015", "15-03-2016");
+    }
+}
+---------------------------------------------------------------------------------------------------------
+//Expected Output:
+    
+// 16-06-2017	27-06-2017
+// 05-01-2017	06-03-2017
+// no range
+// 05-03-2016	04-04-2016
+// 05-03-2016	15-03-2016
